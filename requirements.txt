@@ -3,3 +3,6 @@ shinylive
 pandas
 plotnine
 seaborn
+jupyter
+jupyter-cache
+pyyaml
