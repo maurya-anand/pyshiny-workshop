@@ -1,6 +1,5 @@
 ---
 title: "Workflow best practices"
-author: "Gordon Shotwell & Joe Cheng"
 title-slide-attributes: 
   data-background-color: black
   data-background-image:  images/toc-people-dark.svg
@@ -154,16 +153,6 @@ app_ui = ui.page_fluid(
 
 app = App(app_ui, None)
 ```
-<!-- 
-## Benefits of functions
-- Defines the the logic in one place
-- First step on the abstraction ladder
-- Clarifies how components interact with each other
- -->
-
-## Your turn
-
-Go to [exercises/13-ui-functions](../exercises/13-ui-functions.html) or run problems `5.1` and `5.2` in `apps/problem-sets/exercises/5-workflows`.
 
 ## Separate Reactive and Non-reactive logic
 
@@ -190,11 +179,6 @@ Go to [exercises/13-ui-functions](../exercises/13-ui-functions.html) or run prob
 - Makes your reactive code much clearer
 - You can reuse them in other contexts
 
-## Your turn
-
-Go to [exercises/14-extract-functions](../exercises/14-extract-functions.html) or run problem `5.3` in `apps/problem-sets/exercises/5-workflows`.
-
-
 ## Modules
 - Not going to teach them, but you should know about them
 - Used when you want to encapsulate _both_ UI _and_ server logic together
@@ -202,9 +186,124 @@ Go to [exercises/14-extract-functions](../exercises/14-extract-functions.html) o
 - Great for working with teams of developers
 - Essential for large applications
 
-# Question & Answer
+## Modules sneak peek
 
-<br><br><br>
+```{.python code-line-numbers="1,8"}
+@module.ui
+def images_row_ui():
+    return ui.layout_columns(
+        ui.column(6, ui.output_image("reference_image")),
+        ui.column(4, ui.output_image("segmented_image")),
+    )
 
-Also, please fill out the survey:  
-[https://pos.it/conf-workshop-survey](https://pos.it/conf-workshop-survey)
+@module.server
+def images_row_server(
+    input, output, session, file: SegmentationFile, model: ONNXModel
+):
+    @render.image
+    def reference_image():
+        return {"src": SegmentationFile.reference_path}
+
+    @render.image
+    def segmented_image():
+        prediction = file.get_prediction(model)
+        img_pred = Image.fromarray(prediction.mask)
+        path_tmp = NamedTemporaryFile(suffix=".png", delete=False)
+        img_pred.save(path_tmp.name)
+        return {"src": path_tmp.name}
+```
+
+
+## Modules sneak peek
+
+```{.python code-line-numbers="3-6"}
+@module.ui
+def images_row_ui():
+    return ui.layout_columns(
+        ui.column(6, ui.output_image("reference_image")),
+        ui.column(4, ui.output_image("segmented_image")),
+    )
+
+@module.server
+def images_row_server(
+    input, output, session, file: SegmentationFile, model: ONNXModel
+):
+    @render.image
+    def reference_image():
+        return {"src": SegmentationFile.reference_path}
+
+    @render.image
+    def segmented_image():
+        prediction = file.get_prediction(model)
+        img_pred = Image.fromarray(prediction.mask)
+        path_tmp = NamedTemporaryFile(suffix=".png", delete=False)
+        img_pred.save(path_tmp.name)
+        return {"src": path_tmp.name}
+```
+## Modules sneak peek
+
+```{.python code-line-numbers="8-11"}
+@module.ui
+def images_row_ui():
+    return ui.layout_columns(
+        ui.column(6, ui.output_image("reference_image")),
+        ui.column(4, ui.output_image("segmented_image")),
+    )
+
+@module.server
+def images_row_server(
+    input, output, session, file: SegmentationFile, model: ONNXModel
+):
+    @render.image
+    def reference_image():
+        return {"src": SegmentationFile.reference_path}
+
+    @render.image
+    def segmented_image():
+        prediction = file.get_prediction(model)
+        img_pred = Image.fromarray(prediction.mask)
+        path_tmp = NamedTemporaryFile(suffix=".png", delete=False)
+        img_pred.save(path_tmp.name)
+        return {"src": path_tmp.name}
+```
+
+## Modules sneak peek
+
+```{.python code-line-numbers="4,13"}
+@module.ui
+def images_row_ui():
+    return ui.layout_columns(
+        ui.column(6, ui.output_image("reference_image")),
+        ui.column(4, ui.output_image("segmented_image")),
+    )
+
+@module.server
+def images_row_server(
+    input, output, session, file: SegmentationFile, model: ONNXModel
+):
+    @render.image
+    def reference_image():
+        return {"src": SegmentationFile.reference_path}
+
+    @render.image
+    def segmented_image():
+        prediction = file.get_prediction(model)
+        img_pred = Image.fromarray(prediction.mask)
+        path_tmp = NamedTemporaryFile(suffix=".png", delete=False)
+        img_pred.save(path_tmp.name)
+        return {"src": path_tmp.name}
+```
+
+# Modules sneak peek
+
+```{.python code-line-numbers="7-8"}
+@render.ui
+def images_rows_ui():
+    files = req(dataframe_selected_images())
+    html_tags = []
+    for i, seg_file in enumerate(files):
+        # Creating shiny server module works by calling the server function
+        images_row_server(f"image_row_{i}", seg_file, selected_onnx_model())
+        html_tags.append(images_row_ui(f"image_row_{i}"))
+    return ui.TagList(html_tags)
+```

@@ -1,8 +1,18 @@
 ---
 title: "Reactivity"
-format: 
-  revealjs:
+format:
+  positconfslides-revealjs: 
     incremental: true
+    chalkboard: true
+    slide-number: c/t
+    code-copy: true
+    center-title-slide: false
+    code-link: true
+    highlight-style: a11y
+    width: "1600"
+    height: "900"
+    filters:
+      - positconfslides
 ---
 ```{python}
 # | echo: false
@@ -38,7 +48,7 @@ include_shiny_folder(
 ## How do other frameworks work?
 
 - Streamlit: re-render everything everywhere all the time
-- Dash/Panel/Gradio: Define callback functions
+- Dash/Panel/Gradio/Reflex: Define callback functions
 
 ## Event driven programming
 
@@ -69,7 +79,7 @@ include_shiny_folder(
 ## Outputs and recipes
 
 
-```{.python code-line-numbers="5,12"}
+```{.python code-line-numbers="5,11"}
 from shiny import Inputs, Outputs, Session, App, render, ui
 
 app_ui = ui.page_fluid(
@@ -78,7 +88,6 @@ app_ui = ui.page_fluid(
 )
 
 def server(input: Inputs, output: Outputs, session: Session):
-    @output
     @render.text
     def txt():
         return f"n*2 is {input.n() * 2}"
@@ -89,7 +98,7 @@ app = App(app_ui, server)
 
 ## Recipes and inputs
 
-```{.python code-line-numbers="4,13"}
+```{.python code-line-numbers="4,12"}
 from shiny import Inputs, Outputs, Session, App, render, ui
 
 app_ui = ui.page_fluid(
@@ -99,7 +108,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input: Inputs, output: Outputs, session: Session):
-    @output
     @render.text
     def txt():
         return f"n*2 is {input.n() * 2}"
@@ -413,26 +421,14 @@ flowchart TD
 - `@reactive.Calc` creates calculations whose results can be used by one _or more_ outputs
 - This adds intermediate nodes to the reactive graph
 
-## Reactive Calc example
-
-```{python}
-# | echo: false
-# | output: asis
-
-include_shiny_folder("apps/examples/2.0-simple-reactive-calc", components="viewer")
-```
-
-
 ## Identify repetition
-```{.python code-line-numbers="4,5,11,12"}
-    @output
+```{.python code-line-numbers="3,4,9,10"}
     @render.table
     def df():
         rand = np.random.rand(input.n_rows(), 1)
         df = pd.DataFrame(rand, columns=["col_1"])
         return df
 
-    @output
     @render.plot
     def hist():
         rand = np.random.rand(input.n_rows(), 1)
@@ -452,19 +448,17 @@ include_shiny_folder("apps/examples/2.0-simple-reactive-calc", components="viewe
 3) The table and graph are not using the same sample!
 
 ## Reactive Calculation to the rescue
-```{.python code-line-numbers="1-4,9,15"}
+```{.python code-line-numbers="1-4,9,14"}
     @reactive.Calc
     def sampled_df():
         rand = np.random.rand(input.n_rows(), 1)
         df = pd.DataFrame(rand, columns=["col_1"])
         return df
 
-    @output
     @render.table
     def df():
         return sampled_df()
 
-    @output
     @render.plot
     def hist():
         plot = (
@@ -707,26 +701,6 @@ flowchart TD
   classDef changed fill:#f96
 ```
 
-
-## Your turn
-
-Go to [exercises/5-reactivity](../exercises/5-reactivity.html) or run `apps/problem-sets/exercises/5-reactivity` locally.
-
-
-## Exercise 2.3 answer 
-
-```{mermaid}
-%%| fig-width: 4
-flowchart TD
-  Sl[Slider] --> S[Sample]
-  S[Sample] --> F[Filter]
-  M[Mass] --> F
-  F --> T((Table))
-  S --> P((Plot))
-  F --> Tx((Text))
-  classDef changed fill:#f96
-```
-
 # Overriding reactivity
 
 - By default, when an input changes, any outputs that use it will recalculate
@@ -753,7 +727,6 @@ include_shiny_folder(
 
 ## reactive.event
 ```{.python}
-@output
 @render.text
 @reactive.event(input.my_input)
 def txt():
@@ -764,11 +737,6 @@ def txt():
 - It can be applied to rendering functions or to `@reactive.Calc`
 - It tells Shiny to invalidate the object whenever or more inputs change
 - `@reactive.event` is often used with action buttons or action links
-
-## Your turn
-
-Go to [exercises/6-reactive-event](../exercises/6-reactive-event.html) or run `apps/problem-sets/2-reactivity/2.3-reactive-event` locally.
-
 
 # Side effects
 
@@ -817,7 +785,7 @@ def toggle_modal():
 
 ## The rule
 
-* Code that produces an output: `@output` + `@render.*`
+* Code that produces an output: `@render.*`
 * Code that produces an intermediate value: `@reactive.Calc`
 * **Code that produces only side effects: `@reactive.Effect`**
 
@@ -880,8 +848,3 @@ multiple_choice_app(questions)
 - Somewhat context dependent
 - Multiple strategies can work
 - If your solution feels complicated and painful, ask whether you should use the other strategy
-
-## Your turn
-
-Go to [exercises/7-reactive-effects](../exercises/7-reactive-effects.html) or run `apps/problem-sets/3-reactive-effects/3.1-update-slider` locally.
-

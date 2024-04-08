@@ -1,6 +1,5 @@
 ---
 title: "UI Customization"
-author: "Gordon Shotwell & Joe Cheng"
 title-slide-attributes: 
   data-background-color: black
   data-background-image:  images/toc-people-dark.svg
@@ -178,27 +177,18 @@ include_shiny_folder(
 ```
 
 
-## Your turn
-
-Go to [exercises/8-navsets](../exercises/8-navsets.html) or run `apps/problem-sets/exercises/4-ui-customization/4.1-tabs` locally.
-
-
 ## Cards
 - Cards are just small boxes which contain other elements
 - Useful for grouping inputs and outputs
 - "Dashboards" are just web apps in boxes
-- Currently in experimental, import with `import shiny.experimental as x`
-- Called with `x.ui.card`
-- Cards can take `x.ui.card_header` and `x.ui.card_footer`
+- Called with `ui.card`
 
 ## Cards
 
 ```{.python code-line-numbers="4-8"}
-import shiny.experimental as x
-
 app_ui = ui.page_fluid(
-    x.ui.card(
-        x.ui.card_header("Slider card"),
+    ui.card(
+        ui.card_header("Slider card"),
         ui.input_slider("n", "N", 0, 100, 20),
         ui.output_text_verbatim("txt"),
     )
@@ -214,10 +204,6 @@ include_shiny_folder(
     "apps/examples/4.0.0.0-cards", components="viewer", viewer_height=500
 )
 ```
-
-## Your turn
-
-Go to [exercises/9-cards](../exercises/9-cards.html) or run `apps/problem-sets/exercises/4-ui-customization/4.2-cards` locally.
 
 
 ## Rows and columns
@@ -252,22 +238,20 @@ Go to [exercises/9-cards](../exercises/9-cards.html) or run `apps/problem-sets/e
 - Each column gets an integer **width** from 1-12 
 - This defines how much of the parent the column occupies
 - Reacts to screen size
-- Why 12?
 
 ## Rows and columns
 
 ```{.python}
 ui.row(
-        ui.column(
-            6,
-            ui.output_text("txt"),
-        ),
-        ui.column(
-            6,
-            ui.output_plot("my_plot"),
-            ),
-        ),
+    ui.column(
+        6,
+        ui.output_text("txt"),
     ),
+    ui.column(
+        6,
+        ui.output_plot("my_plot"),
+    ),
+),
 ```
 
 ## This is getting a bit complicated
@@ -286,7 +270,7 @@ import shiny.experimental as x
 ui.navset_tab(
     ui.nav(
         "Tab1",
-        x.ui.card(ui.output_plot("Plot")),
+        ui.card(ui.output_plot("Plot")),
         ui.output_text("some_text"),
     ),
     ui.nav("Tab2", ui.output_data_frame("data")),
@@ -297,7 +281,7 @@ ui.navset_tab(
 ## UI functions are composable
 
 ```{.python}
-card1 = x.ui.card(ui.output_plot("Plot"))
+card1 = ui.card(ui.output_plot("Plot"))
 tab1 = ui.nav(
     "Tab1",
     card1,
@@ -309,21 +293,13 @@ tab3 = ui.nav("Tab3", ui.output_image("image"))
 ui = ui.fluid_page(ui.navset_tab(tab1, tab2, tab3))
 ```
 
-## Your turn
-
-Go to [exercises/10-layout](../exercises/10-layout.html) or run `apps/problem-sets/exercises/4-ui-customization/4.3-layout` locally.
-
 ## Review: Value boxes
 
 - Value boxes are another experimental layout container
-- Just like `x.ui.card()` 
-- Called with `x.ui.value_box()`
+- Just like `ui.card()` 
+- Called with `ui.value_box()`
 - Useful for visually highlighting important numbers or text
 - Usually contain `ui.output_text()` as a child element
-
-## Your turn
-
-Go to [exercises/11-value-boxes](../exercises/11-value-boxes.html) or run `apps/problem-sets/exercises/4-ui-customization/4.5-value-boxes` locally.
 
 ## Dynamic user interfaces
 
@@ -368,7 +344,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.ui
     def dynamic_slider():
         if input.show_slider():
@@ -392,7 +367,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.ui
     def dynamic_slider():
         print(input.show_slider())
@@ -411,7 +385,7 @@ app = App(app_ui, server)
     - Decorate the function with `@output` and `render.ui`
 - Very powerful, but 
     - Round trip to the server
-    - You can lose session state
+    - You start to mix the ui and server code
 
 ## Dynamic UI
 ```{python}
@@ -450,7 +424,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.ui
     def dynamic_slider():
         print(input.show_slider())
@@ -465,11 +438,6 @@ app = App(app_ui, server)
 - Uses JavaScript condition, not python
 - JavaScript condition will be the same as R, Google and chatGPT can help
 - You often want `===` 
-
-## Your turn
-
-Go to [exercises/12-layout](../exercises/12-layout.html) or run problems `4.6` and `4.7` in `apps/problem-sets/exercises/4-ui-customization/`.
-
 
 ## That's a lot of stuff!
 
