@@ -39,6 +39,8 @@ website:
             contents: 
             - exercises/13-ui-functions.qmd
             - exercises/14-extract-functions.qmd
+      - slides/modern-pythonic-toolkit.qmd
+
   navbar:
     tools: 
       - icon: github

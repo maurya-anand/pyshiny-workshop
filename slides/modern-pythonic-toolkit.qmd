@@ -1,0 +1,344 @@
+---
+title: "Modern Pythonic Toolkit"
+format:
+  positconfslides-revealjs: 
+    incremental: true
+    chalkboard: true
+    slide-number: c/t
+    code-copy: true
+    center-title-slide: true
+    code-link: true
+    highlight-style: a11y
+    width: "1600"
+    height: "900"
+    filters:
+      - positconfslides
+---
+
+## Modern Pythonic Toolkit
+
+- This presentation is a run-through of the tools and practices that I use in my day-to-day work as a data scientist and software engineer.
+- The idea is that now you hear about these tools, so later you can look them up yourself.
+- Topics covered:
+    1. Code versioning for data science
+    2. Dependency management
+    3. Code quality and standards
+    4. Code organization
+    5. Validation / Quality Assurance / Testing
+
+## Code Versioning For Data Science
+
+- Code versioning is crucial.
+- You should never pass around code via email or Slack. Never!
+- Everyone should use it, not only software engineers.
+- This differentiates between professionals and... the rest of `pandas` users.
+- `git`, just use `git`.
+
+## Code organization
+
+- A very common problem in data science is how to organize your code, and experiments.
+
+- We recommend creating package for the main code, and then call it from scripts/notebooks.
+
+- Check out the `example_datascience_project` directory for an example. 
+
+## Code organization - Example
+
+```bash
+├── README.md
+├── data                        <- Folder for data
+│   └── large_data.txt
+├── example_datascience_project <- Main logic
+│   ├── __init__.py
+│   ├── model.py
+│   └── serialization.py
+├── notebooks                   <- Jupyter notebooks, numbered for order
+│   └── 01_run_model.ipynb
+├── poetry.lock
+├── pyproject.toml              <- Project configuration
+├── scripts                     <- Scripts to run the code
+│   └── 01_run_model.py
+└── tests                       <- Tests for the code
+    ├── __init__.py
+    └── unit
+        └── test_model.py
+```
+
+## Dependency Management
+
+- Dependency management in python is a mess.
+- It will stay that way for some time probably.
+
+. . .
+
+::: {.callout-important}
+However, you should **never** install packages globally on your machine.
+:::
+
+## venv
+
+This is the simplest way to manage dependencies.
+However, it's not very convenient, and I don't recommend it.
+
+. . .
+
+```bash
+python -m venv env
+source env/bin/activate
+pip install shiny
+
+deactivate
+```
+
+## Conda + pip
+
+One of `venv` problems is that you can work only with the python version you have installed.
+
+- Conda is a package manager that allows you to install different python versions efficiently.
+- However, it's not very good at managing python packages, and many times I struggled to recreate the environment.
+- On the pros side, you can install non-python packages with conda, like CUDA drivers.
+
+. . .
+
+```bash
+conda create -n shiny-env python=3.12
+conda activate shiny-env
+pip install shiny
+
+conda deactivate
+```
+
+## Poetry
+
+- Seems like the best tool we have right now.
+- Poetry does the best job at making environments reproducible.
+- It also encourages you to use best practices like `pyproject.toml`, and storing code as package.
+
+. . .
+
+```bash
+poetry new shiny-project
+cd shiny-project
+poetry add shiny  # Installs shiny
+poetry install    # Installs all dependencies and the project
+poetry shell      # Activates the environment
+```
+
+. . .
+
+::: {.callout-important}
+Poetry doesn't work well with pytorch, tensorflow. For these, you should use `conda`.
+:::
+
+## uv + rye
+
+- This is a fairly young tool, from creators of `ruff` that takes python ecosystem by storm.
+- They promise to create tool like `cargo` for python.
+- `cargo` is a beloved tool for dependency management in Rust.
+- https://rye-up.com/
+
+## Code Quality and Standards
+
+- Code is much more often read then written.
+- Consistent style makes it easier to read.
+- High quality code ages slower
+
+## `ruff`
+
+- Brilliant tool for both **formatting** and **linting**.
+- Formatting means making the code look nice.
+- Linting means checking for errors and bad practices.
+
+. . .
+
+::: {.callout-tip}
+You should use `ruff` instead of `flake8`, `pylint-*`, `black`, `isort`, `bandit`!
+:::
+
+## `ruff format`
+
+```python
+def divide(
+        a,b        
+):
+    return a/b
+    
+def multiply(a
+    ,b
+             ):
+        return a*b
+```
+
+## `ruff format`
+
+```python
+def divide(a, b):
+    return a / b
+
+def multiply(a, b):
+    return a * b
+```
+
+## `ruff check`
+
+```python
+def divide(a, b):
+    c = a / b
+    return a
+```
+
+. . .
+
+`ruff check example.py` gives:
+
+```
+example.py:2:5: F841 Local variable `c` is assigned to but never used
+Found 1 error.
+No fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).
+```
+
+. . .
+
+::: {.callout-note}
+We found an error in the code that would be hard to spot without `ruff`.
+:::
+
+## Type checking - `mypy` / `pyright`
+
+- Linter doesn't know anything about the environment in which the code is run.
+- E.g. it cannot check if imported package has a function that you're calling.
+
+. . .
+
+```python
+import numpy as np
+np.not_existing_function([1, 2, 3])
+```
+
+`ruff check` doesn't catch this error.
+
+. . .
+
+`mypy example.py` gives:
+
+```
+example.py:3: error: Module has no attribute "not_existing_function"  [attr-defined]
+Found 1 error in 1 file (checked 1 source file)
+```
+
+## Type checking - `mypy` / `pyright`
+
+- `mypy` is a static type checker for python.
+- So you can add type hints to your code, and `mypy` will check if you're using them correctly.
+
+. . .
+
+```python
+def divide(a: int, b: int) -> int:
+    return a / b
+```
+
+Results in 
+
+```
+example.py:2: error: Incompatible return value type (got "float", expected "int")  [return-value]
+```
+
+## Type checking - `mypy` / `pyright`
+
+Let's consider more advanced example
+
+```python
+from dataclasses import dataclass
+@dataclass
+class Person:
+    name: str
+    age: int
+    def is_adult(self) -> bool:
+        return self.age >= 18
+```
+
+. . .
+
+And then we're getting the results from some database:
+
+```python
+def get_database_records() -> list[tuple[str, str]]:
+    return [("John", "30"), ("Eve", None)]
+records = get_database_records()
+people = [Person(name, age) for name, age in records]
+```
+
+## Type checking - `mypy` / `pyright`
+
+`mypy` catches two potential errors!
+
+. . .
+
+```python
+class Person:
+    name: str
+    age: int
+def get_database_records() -> list[tuple[str, str]]:
+    return [("John", "30"), ("Eve", None)]
+records = get_database_records()
+people = [Person(name, age) for name, age in records]
+```
+
+. . .
+
+```
+example.py:4: error: List item 1 has incompatible type "tuple[str, None]"; expected "tuple[str, str]"  [list-item]
+example.py:7: error: Argument 2 to "Person" has incompatible type "str"; expected "int"  [arg-type]
+```
+
+## Validation / Quality Assurance / Testing 
+
+- Business needs to have dashboards **validated**. 
+- Many companies have dedicated **Quality Assurance** teams. 
+- As software engineers, we call the validation process **testing**. 
+
+- The process of validating an app by mimicking real users behavior is called **end-to-end testing**. 
+- It’s not some function, runs with some parameters, and we’re happy. 
+- It’s simulating real interactions with clicks and typing inputs in a programmatic way.
+
+## pytest
+
+- For testing we recommend using `pytest`.
+- It's a very powerful tool that allows you to write tests with 0 boilerplate.
+
+. . .
+
+```py
+from example_datascience_project.model import predict
+import numpy as np
+
+def test_predict():
+    # Given
+    X = np.array([1, 2, 3])
+    expected_prediction = 2.0
+
+    # When
+    prediction = predict(X)
+
+    # Then
+    assert prediction == expected_prediction
+```
+
+## playwright
+
+- At Appsilon, in R we often use `cypress` for end-to-end testing.
+- This is library that requires you to write tests in javascript.
+- Fortunately, in python we have library called `playwright` that allows you to write end-to-end tests in python.
+
+. . .
+
+Example test:
+
+```python
+def test_footer(page: Page):
+    # Given the app is open
+    page.goto("http://localhost:8000")
+    # Then the footer should contain the given text
+    expect(page.get_by_test_id("footer")).to_contain_text("By Appsilon with 💙 ")
+```

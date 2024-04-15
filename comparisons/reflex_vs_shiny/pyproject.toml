@@ -6,10 +6,9 @@ authors = ["Piotr Pasza Storozenko <piotr@appsilon.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 pandas = "^2.2.1"
-shiny = "^0.8.1"
-reflex = "^0.4.6"
+reflex = "^0.4.7"
 
 
 [build-system]
