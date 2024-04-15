@@ -1,0 +1,1 @@
+Sitemap: https://Appsilon.github.io/shinyconf-pyshiny-workshop/sitemap.xml
