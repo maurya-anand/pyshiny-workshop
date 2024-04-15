@@ -36,20 +36,17 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.plot
     def mass_plot():
         df = sample_data(penguins.copy(), input.sample())
         return dist_plot(df)
 
-    @output
     @render.text
     def row_count():
         df = sample_data(penguins.copy(), input.sample())
         df = df.loc[df["body_mass"] < input.mass()]
         return f"{df.shape[0]} rows in filtered sample"
 
-    @output
     @render.data_frame
     def species_summary():
         df = sample_data(penguins.copy(), input.sample())

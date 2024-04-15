@@ -3,3 +3,6 @@ shinylive
 pandas
 plotnine
 seaborn
+streamlit
+dash
+plotly

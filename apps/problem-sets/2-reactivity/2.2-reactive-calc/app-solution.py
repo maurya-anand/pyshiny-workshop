@@ -45,17 +45,14 @@ def server(input, output, session):
         df = sampled_df()
         return df.loc[df["body_mass"] < input.mass()]
 
-    @output
     @render.plot
     def mass_plot():
         return dist_plot(sampled_df())
 
-    @output
     @render.text
     def row_count():
         return f"{filtered_df().shape[0]} rows in filtered sample"
 
-    @output
     @render.data_frame
     def species_summary():
         return filtered_df()[list(input.columns())]

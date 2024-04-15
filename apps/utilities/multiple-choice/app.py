@@ -17,7 +17,6 @@ def server(input, output, session):
     def current_q():
         return questions[question_keys[q_num()]]
 
-    @output
     @render.ui
     def question():
         return ui.div(
@@ -30,7 +29,6 @@ def server(input, output, session):
             ),
         )
 
-    @output
     @render.ui
     def validation():
         req(input.question())

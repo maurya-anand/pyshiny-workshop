@@ -10,14 +10,12 @@ app_ui = ui.page_fluid(
 
 
 def server(input: Inputs, output: Outputs, session: Session):
-    @output
     @render.table
     def df():
         rand = np.random.rand(input.n_rows(), 1)
         df = pd.DataFrame(rand, columns=["col_1"])
         return df
 
-    @output
     @render.plot
     def hist():
         rand = np.random.rand(input.n_rows(), 1)

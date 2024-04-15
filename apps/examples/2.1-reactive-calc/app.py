@@ -29,7 +29,6 @@ def server(input, output, session):
         filtered = df.loc[df["body_mass"] < input.mass()]
         return filtered
 
-    @output
     @render.data_frame
     def table():
         summary = (
@@ -41,12 +40,10 @@ def server(input, output, session):
         )
         return summary
 
-    @output
     @render.plot
     def dist():
         return dist_plot(filt_df())
 
-    @output
     @render.plot
     def scatter():
         return scatter_plot(filt_df(), input.trend())

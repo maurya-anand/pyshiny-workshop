@@ -2,7 +2,6 @@ from shiny import ui, render, reactive, App
 import pandas as pd
 from pathlib import Path
 from plots import temp_distirbution, daily_error
-import shiny.experimental as x
 
 infile = Path(__file__).parent / "weather.csv"
 weather = pd.read_csv(infile)
@@ -12,7 +11,7 @@ weather["error"] = weather["observed_temp"] - weather["forecast_temp"]
 def val_box_col(id, n_boxes):
     width = 12 // n_boxes
     card_title = id.replace("_", " ").title()
-    return ui.column(width, x.ui.value_box(card_title, ui.output_text(id)))
+    return ui.column(width, ui.value_box(card_title, ui.output_text(id)))
 
 
 boxes = ["hot_days", "cold_days", "mean_error"]
@@ -24,15 +23,15 @@ error_tab = ui.nav(
     ui.row(
         ui.column(
             6,
-            x.ui.card(
-                x.ui.card_header("Distribution"),
+            ui.card(
+                ui.card_header("Distribution"),
                 ui.output_plot("error_distribution"),
             ),
         ),
         ui.column(
             6,
-            x.ui.card(
-                x.ui.card_header("Error by day"),
+            ui.card(
+                ui.card_header("Error by day"),
                 ui.output_plot("error_by_day"),
                 ui.input_slider("alpha", "Plot Alpha", value=0.5, min=0, max=1),
             ),
@@ -69,34 +68,28 @@ def server(input, output, session):
     def filtered_data() -> pd.DataFrame:
         return filter_weather(weather, input.cities(), input.dates())
 
-    @output
     @render.plot
     def error_distribution():
         return temp_distirbution(filtered_data())
 
-    @output
     @render.plot
     def error_by_day():
         return daily_error(filtered_data(), input.alpha())
 
-    @output
     @render.data_frame
     def data():
         return filtered_data()
 
-    @output
     @render.text
     def mean_error():
         mean_error = filtered_data()["error"].mean()
         return round(mean_error, 2)
 
-    @output
     @render.text
     def hot_days():
         hot_days = filtered_data()["error"] > 0
         return sum(hot_days)
 
-    @output
     @render.text
     def cold_days():
         hot_days = filtered_data()["error"] < 0

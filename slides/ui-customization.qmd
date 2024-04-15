@@ -265,8 +265,6 @@ ui.row(
 ## UI functions are composable
 
 ```{.python}
-import shiny.experimental as x
-
 ui.navset_tab(
     ui.nav(
         "Tab1",

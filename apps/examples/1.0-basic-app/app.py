@@ -12,7 +12,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.ui
     def dynamic_text():
         if input.command_choice() == "Option 1":
@@ -21,13 +20,11 @@ def server(input, output, session):
             id = "output_text_2"
         return ui.output_text(id)
 
-    @output
     @render.text
     @reactive.event(input.compute_button)
     def output_text_1():
         return "Result from option 1"
 
-    @output
     @render.text
     @reactive.event(input.compute_button)
     def output_text_2():

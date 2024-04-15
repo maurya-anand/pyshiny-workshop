@@ -21,7 +21,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.data_frame
     def table():
         df = penguins.copy()
@@ -34,7 +33,6 @@ def server(input, output, session):
         )
         return summary
 
-    @output
     @render.plot
     def dist():
         df = penguins.copy()

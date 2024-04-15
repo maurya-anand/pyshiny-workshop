@@ -3,7 +3,6 @@ from pathlib import Path
 import pandas as pd
 import seaborn as sns
 
-import shiny.experimental as x
 from shiny import App, Inputs, Outputs, Session, reactive, render, req, ui
 
 sns.set_theme()
@@ -15,8 +14,8 @@ numeric_cols = df.select_dtypes(include=["float64"]).columns.tolist()
 species = df["Species"].unique().tolist()
 species.sort()
 
-app_ui = x.ui.page_sidebar(
-    x.ui.sidebar(
+app_ui = ui.page_sidebar(
+    ui.sidebar(
         ui.input_selectize(
             "xvar", "X variable", numeric_cols, selected="Bill Length (mm)"
         ),
@@ -30,7 +29,7 @@ app_ui = x.ui.page_sidebar(
         ui.input_switch("by_species", "Show species", value=True),
         ui.input_switch("show_margins", "Show marginal plots", value=True),
     ),
-    x.ui.output_plot("scatter"),
+    ui.output_plot("scatter"),
 )
 
 
@@ -45,7 +44,6 @@ def server(input: Inputs, output: Outputs, session: Session):
         # Filter the rows so we only include the desired species
         return df[df["Species"].isin(input.species())]
 
-    @output
     @render.plot
     def scatter():
         """Generates a plot for Shiny to display to the user"""

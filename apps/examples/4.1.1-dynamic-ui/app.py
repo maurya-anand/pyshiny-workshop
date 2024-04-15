@@ -11,7 +11,6 @@ app_ui = ui.page_fluid(
 
 
 def server(input, output, session):
-    @output
     @render.ui
     def dynamic_slider():
         print(input.show_slider())

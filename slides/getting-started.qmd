@@ -82,7 +82,7 @@ include_shiny_folder(
 - Easy enough to use for prototypes (especially `shiny.express`!)
 - Efficient enough to handle complexity
 - Everything you need to build production quality apps
-- You don't need to throw away your Shiny apps
+    - You don't need to throw away your Shiny apps when moving from prototype to production ready
 - Comparison with Dash / Streamlit / Jupyter Notebook / Reflex coming later on
 
 ## Anatomy of a Shiny App
