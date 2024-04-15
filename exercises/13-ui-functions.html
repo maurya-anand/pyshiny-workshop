@@ -40,9 +40,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <meta name="shinylive:serviceworker_dir" content="..">
-<script src="../site_libs/quarto-contrib/shinylive-0.2.6/shinylive/load-shinylive-sw.js" type="module"></script>
-<script src="../site_libs/quarto-contrib/shinylive-0.2.6/shinylive/run-python-blocks.js" type="module"></script>
-<link href="../site_libs/quarto-contrib/shinylive-0.2.6/shinylive/shinylive.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/shinylive-0.2.8/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="../site_libs/quarto-contrib/shinylive-0.2.8/shinylive/run-python-blocks.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/shinylive-0.2.8/shinylive/shinylive.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/bootstrap-icons-1.9.1/all.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -471,42 +471,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-import pandas as pd
-from plotnine import (
-    ggplot,
-    aes,
-    geom_density,
-    theme_light,
-    labs,
-    geom_point,
-    theme,
-    element_text,
-)
-
-
-def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
-    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
-    plot_df = pd.melt(
-        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
-    )
-    out = (
-        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
-        + geom_density()
-        + theme_light()
-    )
-    return out
-
-
-def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
-    out = (
-        ggplot(plot_df, aes(x="date", y="error"))
-        + geom_point(alpha=alpha)
-        + theme_light()
-        + theme(axis_text_x=element_text(rotation=45, hjust=1))
-    )
-    return out
-
 ## file: weather.csv
 date,city,state,observed_temp,forecast_temp
 2022-01-02,ALBANY,NY,35,39
@@ -2429,6 +2393,42 @@ date,city,state,observed_temp,forecast_temp
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,20
+
+## file: plots.py
+import pandas as pd
+from plotnine import (
+    ggplot,
+    aes,
+    geom_density,
+    theme_light,
+    labs,
+    geom_point,
+    theme,
+    element_text,
+)
+
+
+def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
+    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
+    plot_df = pd.melt(
+        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
+    )
+    out = (
+        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
+        + geom_density()
+        + theme_light()
+    )
+    return out
+
+
+def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
+    out = (
+        ggplot(plot_df, aes(x="date", y="error"))
+        + geom_point(alpha=alpha)
+        + theme_light()
+        + theme(axis_text_x=element_text(rotation=45, hjust=1))
+    )
+    return out
 </code></pre>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -2532,42 +2532,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-import pandas as pd
-from plotnine import (
-    ggplot,
-    aes,
-    geom_density,
-    theme_light,
-    labs,
-    geom_point,
-    theme,
-    element_text,
-)
-
-
-def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
-    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
-    plot_df = pd.melt(
-        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
-    )
-    out = (
-        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
-        + geom_density()
-        + theme_light()
-    )
-    return out
-
-
-def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
-    out = (
-        ggplot(plot_df, aes(x="date", y="error"))
-        + geom_point(alpha=alpha)
-        + theme_light()
-        + theme(axis_text_x=element_text(rotation=45, hjust=1))
-    )
-    return out
-
 ## file: weather.csv
 date,city,state,observed_temp,forecast_temp
 2022-01-02,ALBANY,NY,35,39
@@ -4490,6 +4454,42 @@ date,city,state,observed_temp,forecast_temp
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,20
+
+## file: plots.py
+import pandas as pd
+from plotnine import (
+    ggplot,
+    aes,
+    geom_density,
+    theme_light,
+    labs,
+    geom_point,
+    theme,
+    element_text,
+)
+
+
+def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
+    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
+    plot_df = pd.melt(
+        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
+    )
+    out = (
+        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
+        + geom_density()
+        + theme_light()
+    )
+    return out
+
+
+def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
+    out = (
+        ggplot(plot_df, aes(x="date", y="error"))
+        + geom_point(alpha=alpha)
+        + theme_light()
+        + theme(axis_text_x=element_text(rotation=45, hjust=1))
+    )
+    return out
 </code></pre>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
@@ -4595,42 +4595,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-import pandas as pd
-from plotnine import (
-    ggplot,
-    aes,
-    geom_density,
-    theme_light,
-    labs,
-    geom_point,
-    theme,
-    element_text,
-)
-
-
-def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
-    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
-    plot_df = pd.melt(
-        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
-    )
-    out = (
-        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
-        + geom_density()
-        + theme_light()
-    )
-    return out
-
-
-def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
-    out = (
-        ggplot(plot_df, aes(x="date", y="error"))
-        + geom_point(alpha=alpha)
-        + theme_light()
-        + theme(axis_text_x=element_text(rotation=45, hjust=1))
-    )
-    return out
-
 ## file: weather.csv
 date,city,state,observed_temp,forecast_temp
 2022-01-02,ALBANY,NY,35,39
@@ -6553,6 +6517,42 @@ date,city,state,observed_temp,forecast_temp
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,20
+
+## file: plots.py
+import pandas as pd
+from plotnine import (
+    ggplot,
+    aes,
+    geom_density,
+    theme_light,
+    labs,
+    geom_point,
+    theme,
+    element_text,
+)
+
+
+def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
+    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
+    plot_df = pd.melt(
+        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
+    )
+    out = (
+        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
+        + geom_density()
+        + theme_light()
+    )
+    return out
+
+
+def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
+    out = (
+        ggplot(plot_df, aes(x="date", y="error"))
+        + geom_point(alpha=alpha)
+        + theme_light()
+        + theme(axis_text_x=element_text(rotation=45, hjust=1))
+    )
+    return out
 </code></pre>
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
@@ -6694,42 +6694,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-import pandas as pd
-from plotnine import (
-    ggplot,
-    aes,
-    geom_density,
-    theme_light,
-    labs,
-    geom_point,
-    theme,
-    element_text,
-)
-
-
-def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
-    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
-    plot_df = pd.melt(
-        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
-    )
-    out = (
-        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
-        + geom_density()
-        + theme_light()
-    )
-    return out
-
-
-def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
-    out = (
-        ggplot(plot_df, aes(x="date", y="error"))
-        + geom_point(alpha=alpha)
-        + theme_light()
-        + theme(axis_text_x=element_text(rotation=45, hjust=1))
-    )
-    return out
-
 ## file: weather.csv
 date,city,state,observed_temp,forecast_temp
 2022-01-02,ALBANY,NY,35,39
@@ -8652,6 +8616,42 @@ date,city,state,observed_temp,forecast_temp
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,20
+
+## file: plots.py
+import pandas as pd
+from plotnine import (
+    ggplot,
+    aes,
+    geom_density,
+    theme_light,
+    labs,
+    geom_point,
+    theme,
+    element_text,
+)
+
+
+def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
+    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
+    plot_df = pd.melt(
+        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
+    )
+    out = (
+        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
+        + geom_density()
+        + theme_light()
+    )
+    return out
+
+
+def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
+    out = (
+        ggplot(plot_df, aes(x="date", y="error"))
+        + geom_point(alpha=alpha)
+        + theme_light()
+        + theme(axis_text_x=element_text(rotation=45, hjust=1))
+    )
+    return out
 </code></pre>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
@@ -8775,42 +8775,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-import pandas as pd
-from plotnine import (
-    ggplot,
-    aes,
-    geom_density,
-    theme_light,
-    labs,
-    geom_point,
-    theme,
-    element_text,
-)
-
-
-def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
-    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
-    plot_df = pd.melt(
-        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
-    )
-    out = (
-        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
-        + geom_density()
-        + theme_light()
-    )
-    return out
-
-
-def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
-    out = (
-        ggplot(plot_df, aes(x="date", y="error"))
-        + geom_point(alpha=alpha)
-        + theme_light()
-        + theme(axis_text_x=element_text(rotation=45, hjust=1))
-    )
-    return out
-
 ## file: weather.csv
 date,city,state,observed_temp,forecast_temp
 2022-01-02,ALBANY,NY,35,39
@@ -10733,6 +10697,42 @@ date,city,state,observed_temp,forecast_temp
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,20
+
+## file: plots.py
+import pandas as pd
+from plotnine import (
+    ggplot,
+    aes,
+    geom_density,
+    theme_light,
+    labs,
+    geom_point,
+    theme,
+    element_text,
+)
+
+
+def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
+    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
+    plot_df = pd.melt(
+        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
+    )
+    out = (
+        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
+        + geom_density()
+        + theme_light()
+    )
+    return out
+
+
+def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
+    out = (
+        ggplot(plot_df, aes(x="date", y="error"))
+        + geom_point(alpha=alpha)
+        + theme_light()
+        + theme(axis_text_x=element_text(rotation=45, hjust=1))
+    )
+    return out
 </code></pre>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
@@ -10861,42 +10861,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-import pandas as pd
-from plotnine import (
-    ggplot,
-    aes,
-    geom_density,
-    theme_light,
-    labs,
-    geom_point,
-    theme,
-    element_text,
-)
-
-
-def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
-    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
-    plot_df = pd.melt(
-        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
-    )
-    out = (
-        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
-        + geom_density()
-        + theme_light()
-    )
-    return out
-
-
-def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
-    out = (
-        ggplot(plot_df, aes(x="date", y="error"))
-        + geom_point(alpha=alpha)
-        + theme_light()
-        + theme(axis_text_x=element_text(rotation=45, hjust=1))
-    )
-    return out
-
 ## file: weather.csv
 date,city,state,observed_temp,forecast_temp
 2022-01-02,ALBANY,NY,35,39
@@ -12819,6 +12783,42 @@ date,city,state,observed_temp,forecast_temp
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,19
 2022-01-31,FLINT,MI,20,20
+
+## file: plots.py
+import pandas as pd
+from plotnine import (
+    ggplot,
+    aes,
+    geom_density,
+    theme_light,
+    labs,
+    geom_point,
+    theme,
+    element_text,
+)
+
+
+def temp_distirbution(plot_df: pd.DataFrame) -&gt; ggplot:
+    plot_df = plot_df[["observed_temp", "forecast_temp", "date"]]
+    plot_df = pd.melt(
+        plot_df, id_vars="date", value_vars=["observed_temp", "forecast_temp"]
+    )
+    out = (
+        ggplot(plot_df, aes(x="value", group="variable", color="variable"))
+        + geom_density()
+        + theme_light()
+    )
+    return out
+
+
+def daily_error(plot_df: pd.DataFrame, alpha: float) -&gt; ggplot:
+    out = (
+        ggplot(plot_df, aes(x="date", y="error"))
+        + geom_point(alpha=alpha)
+        + theme_light()
+        + theme(axis_text_x=element_text(rotation=45, hjust=1))
+    )
+    return out
 </code></pre>
 </div>
 <div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
