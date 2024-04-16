@@ -11,6 +11,7 @@
 <script src="../site_libs/quarto-contrib/posit_slides/posit-slides.js"></script><meta charset="utf-8">
   <meta name="generator" content="quarto-1.4.553">
 
+  <meta name="author" content="By Piotr Pasza Storożenko, with Pavel Demin support">
   <title>Shiny for Python Workshop - Modern Pythonic Toolkit</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -392,10 +393,16 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="quarto-title-block center">
+<section id="title-slide" data-background-color="black" data-background-size="contain" class="quarto-title-block center">
   <h1 class="title">Modern Pythonic Toolkit</h1>
+  <p class="subtitle">Dive Into PyShiny by Appsilon</p>
 
 <div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+By Piotr Pasza Storożenko, with Pavel Demin support 
+</div>
+</div>
 </div>
 
 </section>
@@ -684,7 +691,51 @@ example.py:7: error: Argument 2 to "Person" has incompatible type "str"; expecte
 </div>
 </section>
 <section class="slide level2">
-<h2>Validation / Quality Assurance / Testing</h2>
+<h2>Data / requests validation - <code>pydantic</code></h2>
+<ul>
+<li class="fragment">In real life, you often validate data from some API, or from a database.</li>
+<li class="fragment">Then, if you parse an external json type hints won’t help you.</li>
+<li class="fragment">However, <code>pydantic</code> will.</li>
+</ul>
+<div class="fragment">
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel</span>
+<span id="cb17-2"><a></a><span class="im">import</span> json</span>
+<span id="cb17-3"><a></a><span class="kw">class</span> Person(BaseModel):</span>
+<span id="cb17-4"><a></a>    name: <span class="bu">str</span></span>
+<span id="cb17-5"><a></a>    age: <span class="bu">int</span></span>
+<span id="cb17-6"><a></a><span class="co"># [</span></span>
+<span id="cb17-7"><a></a><span class="co">#     {"name": "John", "age": 30},</span></span>
+<span id="cb17-8"><a></a><span class="co">#     {"name": "Eve", "age": null}</span></span>
+<span id="cb17-9"><a></a><span class="co"># ]</span></span>
+<span id="cb17-10"><a></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"people.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb17-11"><a></a>    records <span class="op">=</span> json.load(f)</span>
+<span id="cb17-12"><a></a><span class="bu">print</span>(records)</span>
+<span id="cb17-13"><a></a>people <span class="op">=</span> [Person(<span class="op">**</span>record) <span class="cf">for</span> record <span class="kw">in</span> records]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Data / requests validation - <code>pydantic</code></h2>
+<p>We get:</p>
+<pre><code>pydantic_core._pydantic_core.ValidationError: 1 validation error for Person age
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.7/v/int_type</code></pre>
+<p>While <code>dataclasses</code> will be silent about it.</p>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Type hints are just hints. They’re not enforced by python interpreter!</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>More on Validation / Quality Assurance / Testing</h2>
 <ul>
 <li class="fragment"><p>Business needs to have dashboards <strong>validated</strong>.</p></li>
 <li class="fragment"><p>Many companies have dedicated <strong>Quality Assurance</strong> teams.</p></li>
@@ -701,19 +752,19 @@ example.py:7: error: Argument 2 to "Person" has incompatible type "str"; expecte
 <li class="fragment">It’s a very powerful tool that allows you to write tests with 0 boilerplate.</li>
 </ul>
 <div class="fragment">
-<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a><span class="im">from</span> example_datascience_project.model <span class="im">import</span> predict</span>
-<span id="cb17-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb17-3"><a></a></span>
-<span id="cb17-4"><a></a><span class="kw">def</span> test_predict():</span>
-<span id="cb17-5"><a></a>    <span class="co"># Given</span></span>
-<span id="cb17-6"><a></a>    X <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
-<span id="cb17-7"><a></a>    expected_prediction <span class="op">=</span> <span class="fl">2.0</span></span>
-<span id="cb17-8"><a></a></span>
-<span id="cb17-9"><a></a>    <span class="co"># When</span></span>
-<span id="cb17-10"><a></a>    prediction <span class="op">=</span> predict(X)</span>
-<span id="cb17-11"><a></a></span>
-<span id="cb17-12"><a></a>    <span class="co"># Then</span></span>
-<span id="cb17-13"><a></a>    <span class="cf">assert</span> prediction <span class="op">==</span> expected_prediction</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a><span class="im">from</span> example_datascience_project.model <span class="im">import</span> predict</span>
+<span id="cb19-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb19-3"><a></a></span>
+<span id="cb19-4"><a></a><span class="kw">def</span> test_predict():</span>
+<span id="cb19-5"><a></a>    <span class="co"># Given</span></span>
+<span id="cb19-6"><a></a>    X <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
+<span id="cb19-7"><a></a>    expected_prediction <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb19-8"><a></a></span>
+<span id="cb19-9"><a></a>    <span class="co"># When</span></span>
+<span id="cb19-10"><a></a>    prediction <span class="op">=</span> predict(X)</span>
+<span id="cb19-11"><a></a></span>
+<span id="cb19-12"><a></a>    <span class="co"># Then</span></span>
+<span id="cb19-13"><a></a>    <span class="cf">assert</span> prediction <span class="op">==</span> expected_prediction</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section class="slide level2">
@@ -725,11 +776,11 @@ example.py:7: error: Argument 2 to "Person" has incompatible type "str"; expecte
 </ul>
 <div class="fragment">
 <p>Example test:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a></a><span class="kw">def</span> test_footer(page: Page):</span>
-<span id="cb18-2"><a></a>    <span class="co"># Given the app is open</span></span>
-<span id="cb18-3"><a></a>    page.goto(<span class="st">"http://localhost:8000"</span>)</span>
-<span id="cb18-4"><a></a>    <span class="co"># Then the footer should contain the given text</span></span>
-<span id="cb18-5"><a></a>    expect(page.get_by_test_id(<span class="st">"footer"</span>)).to_contain_text(<span class="st">"By Appsilon with 💙 "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a><span class="kw">def</span> test_footer(page: Page):</span>
+<span id="cb20-2"><a></a>    <span class="co"># Given the app is open</span></span>
+<span id="cb20-3"><a></a>    page.goto(<span class="st">"http://localhost:8000"</span>)</span>
+<span id="cb20-4"><a></a>    <span class="co"># Then the footer should contain the given text</span></span>
+<span id="cb20-5"><a></a>    expect(page.get_by_test_id(<span class="st">"footer"</span>)).to_contain_text(<span class="st">"By Appsilon with 💙 "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
