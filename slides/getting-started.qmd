@@ -1,10 +1,9 @@
 ---
 title: "Getting Started"
-author: "Piotr Pasza Storożenko & Pavel Demin"
-subtitle: "Original content by Gordon Shotwell & Joe Cheng (Posit)"
+author: "By Piotr Pasza Storożenko, with Pavel Demin support"
+subtitle: "Dive Into PyShiny by Appsilon"
 title-slide-attributes: 
   data-background-color: black
-  data-background-image:  images/toc-people-dark.svg
   data-background-size: contain
 format:
   positconfslides-revealjs: 
@@ -30,6 +29,8 @@ from helpers import problem_tabs, include_shiny_folder
 ```
 
 # Welcome to the Shiny Python Workshop
+
+Original content by Gordon Shotwell & Joe Cheng (Posit).
 
 ## Assumptions
 

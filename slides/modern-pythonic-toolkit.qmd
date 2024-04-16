@@ -1,5 +1,10 @@
 ---
 title: "Modern Pythonic Toolkit"
+author: "By Piotr Pasza Storożenko, with Pavel Demin support"
+subtitle: "Dive Into PyShiny by Appsilon"
+title-slide-attributes: 
+  data-background-color: black
+  data-background-size: contain
 format:
   positconfslides-revealjs: 
     incremental: true
@@ -292,7 +297,46 @@ example.py:4: error: List item 1 has incompatible type "tuple[str, None]"; expec
 example.py:7: error: Argument 2 to "Person" has incompatible type "str"; expected "int"  [arg-type]
 ```
 
-## Validation / Quality Assurance / Testing 
+## Data / requests validation - `pydantic`
+
+- In real life, you often validate data from some API, or from a database.
+- Then, if you parse an external json type hints won't help you.
+- However, `pydantic` will.
+
+. . .
+
+```python
+from pydantic import BaseModel
+import json
+class Person(BaseModel):
+    name: str
+    age: int
+# [
+#     {"name": "John", "age": 30},
+#     {"name": "Eve", "age": null}
+# ]
+with open("people.json", "r") as f:
+    records = json.load(f)
+print(records)
+people = [Person(**record) for record in records]
+```
+
+## Data / requests validation - `pydantic`
+
+We get:
+```
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Person age
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.7/v/int_type
+```
+
+While `dataclasses` will be silent about it.
+
+::: {.callout-important}
+Type hints are just hints. They're not enforced by python interpreter!
+:::
+
+## More on Validation / Quality Assurance / Testing 
 
 - Business needs to have dashboards **validated**. 
 - Many companies have dedicated **Quality Assurance** teams. 

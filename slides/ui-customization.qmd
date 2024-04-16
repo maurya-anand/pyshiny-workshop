@@ -1,8 +1,9 @@
 ---
 title: "UI Customization"
+author: "By Piotr Pasza Storożenko, with Pavel Demin support"
+subtitle: "Dive Into PyShiny by Appsilon"
 title-slide-attributes: 
   data-background-color: black
-  data-background-image:  images/toc-people-dark.svg
   data-background-size: contain
 format:
   positconfslides-revealjs: 

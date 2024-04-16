@@ -1,5 +1,10 @@
 ---
 title: "Reactivity"
+author: "By Piotr Pasza Storożenko, with Pavel Demin support"
+subtitle: "Dive Into PyShiny by Appsilon"
+title-slide-attributes: 
+  data-background-color: black
+  data-background-size: contain
 format:
   positconfslides-revealjs: 
     incremental: true
