@@ -2,7 +2,7 @@ from shiny import ui, reactive, render
 from shiny.express import input
 import pandas as pd
 
-df_penguins = pd.read_csv("data/penguins.csv")
+df_penguins = pd.read_csv("../../data/penguins.csv")
 
 ui.panel_title("Shiny Reactivity Demo 2")
 ui.input_numeric("n_rows", "Number of rows to sample", value=10)

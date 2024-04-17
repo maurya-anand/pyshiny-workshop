@@ -1,7 +1,7 @@
 from shiny import ui, reactive, render, App
 import pandas as pd
 
-df_penguins = pd.read_csv("data/penguins.csv")
+df_penguins = pd.read_csv("../../data/penguins.csv")
 
 app_ui = ui.page_fluid(
     ui.panel_title("Shiny Reactivity Demo"),

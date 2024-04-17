@@ -1,7 +1,7 @@
 from dash import Dash, html, dcc, Output, Input, dash_table
 import pandas as pd
 
-df_penguins = pd.read_csv("data/penguins.csv")
+df_penguins = pd.read_csv("../../data/penguins.csv")
 
 app = Dash(__name__)
 

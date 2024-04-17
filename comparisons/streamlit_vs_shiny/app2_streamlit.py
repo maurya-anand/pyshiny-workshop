@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 
-df_penguins = pd.read_csv("data/penguins.csv")
+df_penguins = pd.read_csv("../../data/penguins.csv")
 
 st.title("Streamlit Reactivity Demo 2")
 slider = st.slider("Number of rows to sample", 1, 100, 10)

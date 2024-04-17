@@ -386,3 +386,7 @@ def test_footer(page: Page):
     # Then the footer should contain the given text
     expect(page.get_by_test_id("footer")).to_contain_text("By Appsilon with 💙 ")
 ```
+
+## 
+
+![](images/secret.jpg)

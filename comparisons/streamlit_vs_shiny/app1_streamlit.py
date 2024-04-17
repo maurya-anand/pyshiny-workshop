@@ -6,7 +6,7 @@ slider = st.slider("Number of rows to show", 1, 100, 10)
 
 "Penguins dataset:"
 
-df_penguins = pd.read_csv("data/penguins.csv")
+df_penguins = pd.read_csv("../../data/penguins.csv")
 
 filtered_data = df_penguins.head(slider)
 
