@@ -1422,39 +1422,6 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 
-## file: plots.py
-from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
-
-
-def dist_plot(df):
-    plot = (
-        ggplot(df, aes(x="body_mass", fill="species"))
-        + geom_density(alpha=0.2)
-        + theme_light()
-    )
-    return plot
-
-
-def scatter_plot(df, trend_line=False):
-    plot = (
-        ggplot(
-            df,
-            aes(
-                x="bill_length",
-                y="bill_depth",
-                color="species",
-                group="species",
-            ),
-        )
-        + geom_point()
-        + theme_light()
-    )
-
-    if trend_line:
-        plot = plot + stat_smooth()
-
-    return plot
-
 ## file: penguins.csv
 species,island,bill_length,bill_depth,flipper_length,body_mass,sex,year
 Adelie,Torgersen,39.1,18.7,181,3750,male,2007
@@ -1801,6 +1768,39 @@ Chinstrap,Dream,43.5,18.1,202,3400,female,2009
 Chinstrap,Dream,49.6,18.2,193,3775,male,2009
 Chinstrap,Dream,50.8,19,210,4100,male,2009
 Chinstrap,Dream,50.2,18.7,198,3775,female,2009
+
+## file: plots.py
+from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
+
+
+def dist_plot(df):
+    plot = (
+        ggplot(df, aes(x="body_mass", fill="species"))
+        + geom_density(alpha=0.2)
+        + theme_light()
+    )
+    return plot
+
+
+def scatter_plot(df, trend_line=False):
+    plot = (
+        ggplot(
+            df,
+            aes(
+                x="bill_length",
+                y="bill_depth",
+                color="species",
+                group="species",
+            ),
+        )
+        + geom_point()
+        + theme_light()
+    )
+
+    if trend_line:
+        plot = plot + stat_smooth()
+
+    return plot
 </code></pre>
 <div class="column-screen-inset">
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -1875,39 +1875,6 @@ def scatter():
     filtered = df.loc[df["body_mass"] &lt; input.mass()]
     return scatter_plot(filtered, input.trend())
 
-## file: plots.py
-from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
-
-
-def dist_plot(df):
-    plot = (
-        ggplot(df, aes(x="body_mass", fill="species"))
-        + geom_density(alpha=0.2)
-        + theme_light()
-    )
-    return plot
-
-
-def scatter_plot(df, trend_line=False):
-    plot = (
-        ggplot(
-            df,
-            aes(
-                x="bill_length",
-                y="bill_depth",
-                color="species",
-                group="species",
-            ),
-        )
-        + geom_point()
-        + theme_light()
-    )
-
-    if trend_line:
-        plot = plot + stat_smooth()
-
-    return plot
-
 ## file: penguins.csv
 species,island,bill_length,bill_depth,flipper_length,body_mass,sex,year
 Adelie,Torgersen,39.1,18.7,181,3750,male,2007
@@ -2254,6 +2221,39 @@ Chinstrap,Dream,43.5,18.1,202,3400,female,2009
 Chinstrap,Dream,49.6,18.2,193,3775,male,2009
 Chinstrap,Dream,50.8,19,210,4100,male,2009
 Chinstrap,Dream,50.2,18.7,198,3775,female,2009
+
+## file: plots.py
+from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
+
+
+def dist_plot(df):
+    plot = (
+        ggplot(df, aes(x="body_mass", fill="species"))
+        + geom_density(alpha=0.2)
+        + theme_light()
+    )
+    return plot
+
+
+def scatter_plot(df, trend_line=False):
+    plot = (
+        ggplot(
+            df,
+            aes(
+                x="bill_length",
+                y="bill_depth",
+                color="species",
+                group="species",
+            ),
+        )
+        + geom_point()
+        + theme_light()
+    )
+
+    if trend_line:
+        plot = plot + stat_smooth()
+
+    return plot
 </code></pre>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
@@ -2317,39 +2317,6 @@ def dist():
     filtered = df.loc[df["body_mass"] &lt; input.mass()]
     return dist_plot(filtered)
 
-## file: plots.py
-from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
-
-
-def dist_plot(df):
-    plot = (
-        ggplot(df, aes(x="body_mass", fill="species"))
-        + geom_density(alpha=0.2)
-        + theme_light()
-    )
-    return plot
-
-
-def scatter_plot(df, trend_line=False):
-    plot = (
-        ggplot(
-            df,
-            aes(
-                x="bill_length",
-                y="bill_depth",
-                color="species",
-                group="species",
-            ),
-        )
-        + geom_point()
-        + theme_light()
-    )
-
-    if trend_line:
-        plot = plot + stat_smooth()
-
-    return plot
-
 ## file: penguins.csv
 species,island,bill_length,bill_depth,flipper_length,body_mass,sex,year
 Adelie,Torgersen,39.1,18.7,181,3750,male,2007
@@ -2696,6 +2663,39 @@ Chinstrap,Dream,43.5,18.1,202,3400,female,2009
 Chinstrap,Dream,49.6,18.2,193,3775,male,2009
 Chinstrap,Dream,50.8,19,210,4100,male,2009
 Chinstrap,Dream,50.2,18.7,198,3775,female,2009
+
+## file: plots.py
+from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
+
+
+def dist_plot(df):
+    plot = (
+        ggplot(df, aes(x="body_mass", fill="species"))
+        + geom_density(alpha=0.2)
+        + theme_light()
+    )
+    return plot
+
+
+def scatter_plot(df, trend_line=False):
+    plot = (
+        ggplot(
+            df,
+            aes(
+                x="bill_length",
+                y="bill_depth",
+                color="species",
+                group="species",
+            ),
+        )
+        + geom_point()
+        + theme_light()
+    )
+
+    if trend_line:
+        plot = plot + stat_smooth()
+
+    return plot
 </code></pre>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
@@ -2767,39 +2767,6 @@ def scatter():
     filtered = df.loc[df["body_mass"] &lt; input.mass()]
     return scatter_plot(filtered, input.trend())
 
-## file: plots.py
-from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
-
-
-def dist_plot(df):
-    plot = (
-        ggplot(df, aes(x="body_mass", fill="species"))
-        + geom_density(alpha=0.2)
-        + theme_light()
-    )
-    return plot
-
-
-def scatter_plot(df, trend_line=False):
-    plot = (
-        ggplot(
-            df,
-            aes(
-                x="bill_length",
-                y="bill_depth",
-                color="species",
-                group="species",
-            ),
-        )
-        + geom_point()
-        + theme_light()
-    )
-
-    if trend_line:
-        plot = plot + stat_smooth()
-
-    return plot
-
 ## file: penguins.csv
 species,island,bill_length,bill_depth,flipper_length,body_mass,sex,year
 Adelie,Torgersen,39.1,18.7,181,3750,male,2007
@@ -3146,6 +3113,39 @@ Chinstrap,Dream,43.5,18.1,202,3400,female,2009
 Chinstrap,Dream,49.6,18.2,193,3775,male,2009
 Chinstrap,Dream,50.8,19,210,4100,male,2009
 Chinstrap,Dream,50.2,18.7,198,3775,female,2009
+
+## file: plots.py
+from plotnine import ggplot, geom_density, aes, theme_light, geom_point, stat_smooth
+
+
+def dist_plot(df):
+    plot = (
+        ggplot(df, aes(x="body_mass", fill="species"))
+        + geom_density(alpha=0.2)
+        + theme_light()
+    )
+    return plot
+
+
+def scatter_plot(df, trend_line=False):
+    plot = (
+        ggplot(
+            df,
+            aes(
+                x="bill_length",
+                y="bill_depth",
+                color="species",
+                group="species",
+            ),
+        )
+        + geom_point()
+        + theme_light()
+    )
+
+    if trend_line:
+        plot = plot + stat_smooth()
+
+    return plot
 </code></pre>
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
